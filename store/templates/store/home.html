@@ -1,0 +1,93 @@
+
+{% extends 'store/base.html' %}
+
+{% block title %}Inicio | GameMarket{% endblock %}
+
+{% block content %}
+
+<div class="p-5 mb-4 rounded-4"
+     style="background: linear-gradient(120deg, #25104b, #15152d);">
+
+    <h1 class="display-4 fw-bold">
+        Encuentra tu consola favorita
+    </h1>
+
+    <p class="lead">
+        Compra y vende consolas nuevas o usadas.
+        Encuentra las mejores opciones.
+    </p>
+
+    <a href="#productos" class="btn btn-purple btn-lg">
+        Explorar productos
+    </a>
+
+</div>
+
+<h2 class="main-title mb-4" id="productos">
+    🎮 Productos disponibles
+</h2>
+
+<div class="row g-4">
+
+    {% for product in products %}
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card product-card">
+
+                {% if product.image %}
+                    <img src="{{ product.image.url }}"
+                         alt="{{ product.name }}">
+                {% else %}
+                    <div class="d-flex align-items-center justify-content-center"
+                         style="height:190px; background:#29293c;">
+                        <span style="font-size:65px;">🎮</span>
+                    </div>
+                {% endif %}
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        {{ product.name }}
+                    </h5>
+
+                    <p class="text-secondary-emphasis">
+                        {{ product.description|truncatewords:15 }}
+                    </p>
+
+                    <h4 class="text-warning">
+                        ${{ product.price }}
+                    </h4>
+
+                    <p>
+                        {% if product.condition == "new" %}
+                            <span class="badge bg-success">Nuevo</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Usado</span>
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        Vendedor: {{ product.owner.username }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="col-12">
+            <div class="alert alert-dark">
+                Todavía no hay productos publicados.
+                Pronto encontrarás consolas y videojuegos aquí.
+            </div>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

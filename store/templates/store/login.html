@@ -1,0 +1,70 @@
+
+{% extends 'store/base.html' %}
+
+{% block title %}Iniciar sesión | GameMarket{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-6 col-lg-5">
+
+        <div class="card product-card p-4">
+
+            <h2 class="main-title text-center mb-4">
+                Iniciar sesión
+            </h2>
+
+            <p class="text-center">
+                Bienvenido a GameMarket
+            </p>
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <input type="hidden" name="next" value="{{ next }}">
+
+                {{ form.non_field_errors }}
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Correo electrónico
+                    </label>
+
+                    {{ form.username }}
+                    {{ form.username.errors }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Contraseña
+                    </label>
+
+                    {{ form.password }}
+                    {{ form.password.errors }}
+                </div>
+
+                <button type="submit"
+                        class="btn btn-purple w-100">
+                    Entrar
+                </button>
+
+            </form>
+
+            <p class="text-center mt-4">
+                ¿No tienes cuenta?
+
+                <a href="{% url 'register' %}"
+                   style="color:#a855f7;">
+                    Regístrate aquí
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
