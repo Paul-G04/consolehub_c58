@@ -1,16 +1,9 @@
 
 from django import forms
-from django.contrib.auth.forms import (
-    UserCreationForm,
-    AuthenticationForm
-)
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-from .models import User
+from .models import User, Product
 
-
-# =====================================
-# FORMULARIO DE REGISTRO
-# =====================================
 
 class RegisterForm(UserCreationForm):
 
@@ -18,31 +11,15 @@ class RegisterForm(UserCreationForm):
         label="Correo electrónico",
         widget=forms.EmailInput(attrs={
             "class": "form-control",
-            "placeholder": "Ingresa tu correo electrónico"
+            "placeholder": "Correo electrónico"
         })
     )
 
-    username = forms.CharField(
-        label="Nombre de usuario",
-        widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": "Crea tu nombre de usuario"
-        })
-    )
-
-    password1 = forms.CharField(
-        label="Contraseña",
-        widget=forms.PasswordInput(attrs={
-            "class": "form-control",
-            "placeholder": "Crea una contraseña"
-        })
-    )
-
-    password2 = forms.CharField(
-        label="Confirmar contraseña",
-        widget=forms.PasswordInput(attrs={
-            "class": "form-control",
-            "placeholder": "Confirma tu contraseña"
+    is_seller = forms.BooleanField(
+        label="Quiero registrarme como vendedor",
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            "class": "form-check-input"
         })
     )
 
@@ -51,14 +28,18 @@ class RegisterForm(UserCreationForm):
         fields = [
             "username",
             "email",
+            "is_seller",
             "password1",
-            "password2",
+            "password2"
         ]
 
+        widgets = {
+            "username": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Nombre de usuario"
+            })
+        }
 
-# =====================================
-# FORMULARIO DE LOGIN
-# =====================================
 
 class LoginForm(AuthenticationForm):
 
@@ -66,7 +47,7 @@ class LoginForm(AuthenticationForm):
         label="Correo electrónico",
         widget=forms.EmailInput(attrs={
             "class": "form-control",
-            "placeholder": "Ingresa tu correo electrónico"
+            "placeholder": "Correo electrónico"
         })
     )
 
@@ -74,6 +55,57 @@ class LoginForm(AuthenticationForm):
         label="Contraseña",
         widget=forms.PasswordInput(attrs={
             "class": "form-control",
-            "placeholder": "Ingresa tu contraseña"
+            "placeholder": "Contraseña"
         })
     )
+
+
+class ProductForm(forms.ModelForm):
+
+    class Meta:
+        model = Product
+
+        fields = [
+            "name",
+            "image",
+            "description",
+            "price",
+            "condition",
+            "stock",
+            "categories"
+        ]
+
+        labels = {
+            "name": "Nombre del producto",
+            "image": "Fotografía",
+            "description": "Descripción",
+            "price": "Precio",
+            "condition": "Estado",
+            "stock": "Existencias",
+            "categories": "Categorías"
+        }
+
+        widgets = {
+            "name": forms.TextInput(attrs={
+                "class": "form-control"
+            }),
+            "image": forms.ClearableFileInput(attrs={
+                "class": "form-control"
+            }),
+            "description": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 4
+            }),
+            "price": forms.NumberInput(attrs={
+                "class": "form-control",
+                "step": "0.01"
+            }),
+            "condition": forms.Select(attrs={
+                "class": "form-select"
+            }),
+            "stock": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": "0"
+            }),
+            "categories": forms.CheckboxSelectMultiple()
+        }
