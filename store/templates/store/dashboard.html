@@ -1,0 +1,166 @@
+
+{% extends 'store/base.html' %}
+
+{% block title %}Mi tienda | GameMarket{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+
+    <div>
+        <h1 class="main-title mb-1">Mi tienda</h1>
+        <p class="text-light mb-0">
+            Bienvenido, {{ user.username }}. Administra tus productos publicados.
+        </p>
+    </div>
+
+    <a href="{% url 'product_create' %}" class="btn btn-purple">
+        + Agregar producto
+    </a>
+
+</div>
+
+<!-- RESUMEN -->
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-6">
+        <div class="card p-4 h-100"
+             style="background:#202034; color:white; border:1px solid #40345f;">
+
+            <p class="text-secondary mb-1">Mis productos publicados</p>
+            <h2 class="text-warning mb-0">{{ total_products }}</h2>
+
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card p-4 h-100"
+             style="background:#202034; color:white; border:1px solid #40345f;">
+
+            <p class="text-secondary mb-1">Existencias totales</p>
+            <h2 class="text-warning mb-0">{{ total_stock }}</h2>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- LISTA DE PRODUCTOS -->
+
+<div class="card shadow-sm"
+     style="background:#202034; color:white; border:1px solid #40345f;">
+
+    <div class="card-body">
+
+        <h4 class="mb-3">Mis productos</h4>
+
+        {% if products %}
+
+            <div class="table-responsive">
+
+                <table class="table table-dark table-hover align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Estado</th>
+                            <th>Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for product in products %}
+
+                            <tr>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        {% if product.image %}
+
+                                            <img src="{{ product.image.url }}"
+                                                 alt="{{ product.name }}"
+                                                 width="65"
+                                                 height="55"
+                                                 style="object-fit:cover; border-radius:8px;">
+
+                                        {% else %}
+
+                                            <div class="d-flex align-items-center justify-content-center"
+                                                 style="width:65px; height:55px; background:#29293c; border-radius:8px;">
+                                                🎮
+                                            </div>
+
+                                        {% endif %}
+
+                                        <strong>{{ product.name }}</strong>
+
+                                    </div>
+                                </td>
+
+                                <td>${{ product.price }}</td>
+
+                                <td>
+                                    {% if product.condition == "new" %}
+                                        <span class="badge bg-success">Nuevo</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Usado</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ product.stock }}</td>
+
+                                <td>
+                                    <div class="d-flex flex-wrap gap-2">
+
+                                        <a href="{% url 'product_update' product.id %}"
+                                           class="btn btn-warning btn-sm">
+                                            Editar
+                                        </a>
+
+                                        <a href="{% url 'product_delete' product.id %}"
+                                           class="btn btn-danger btn-sm">
+                                            Eliminar
+                                        </a>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div class="text-center py-5">
+
+                <h5>No tienes productos registrados</h5>
+
+                <p class="text-secondary">
+                    Publica tu primer producto para comenzar a vender.
+                </p>
+
+                <a href="{% url 'product_create' %}"
+                   class="btn btn-purple">
+                    Agregar mi primer producto
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

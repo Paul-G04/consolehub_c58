@@ -1,0 +1,230 @@
+
+{% extends "store/base.html" %}
+
+{% block title %}Panel Administrativo | GameMarket{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="mb-4">
+        <h1 class="main-title">Panel Administrativo</h1>
+        <p class="text-secondary">
+            Bienvenido al centro de administración de GameMarket.
+            Consulta el estado general de la plataforma.
+        </p>
+    </div>
+
+    <!-- INDICADORES -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card text-white h-100 p-3"
+                 style="background:#202034; border:1px solid #40345f;">
+                <h6 class="text-secondary">Usuarios registrados</h6>
+                <h2 class="fw-bold text-warning">
+                    {{ total_users }}
+                </h2>
+                <p class="mb-0">Cuentas registradas en GameMarket</p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card text-white h-100 p-3"
+                 style="background:#202034; border:1px solid #40345f;">
+                <h6 class="text-secondary">Productos</h6>
+                <h2 class="fw-bold text-warning">
+                    {{ total_products }}
+                </h2>
+                <p class="mb-0">Productos publicados</p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card text-white h-100 p-3"
+                 style="background:#202034; border:1px solid #40345f;">
+                <h6 class="text-secondary">Categorías disponibles</h6>
+                <h2 class="fw-bold text-warning">
+                    {{ total_categories }}
+                </h2>
+                <p class="mb-0">Categorías registradas</p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card text-white h-100 p-3"
+                 style="background:#202034; border:1px solid #40345f;">
+                <h6 class="text-secondary">Carritos</h6>
+                <h2 class="fw-bold text-warning">
+                    {{ total_carts }}
+                </h2>
+                <p class="mb-0">Carritos registrados</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- USUARIOS RECIENTES -->
+
+    <div class="card text-white mb-4"
+         style="background:#202034; border:1px solid #40345f;">
+
+        <div class="card-header"
+             style="background:#29293c;">
+            <h5 class="mb-0">Usuarios registrados recientemente</h5>
+        </div>
+
+        <div class="card-body">
+
+            {% if recent_users %}
+
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Nombre de usuario</th>
+                                <th>Correo electrónico</th>
+                                <th>Fecha de registro</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for item in recent_users %}
+                                <tr>
+                                    <td>{{ item.username }}</td>
+                                    <td>{{ item.email }}</td>
+                                    <td>{{ item.date_joined|date:"d/m/Y" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+            {% else %}
+
+                <p class="text-secondary mb-0">
+                    Todavía no hay usuarios registrados.
+                </p>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- PRODUCTOS RECIENTES -->
+
+    <div class="card text-white mb-4"
+         style="background:#202034; border:1px solid #40345f;">
+
+        <div class="card-header"
+             style="background:#29293c;">
+            <h5 class="mb-0">Productos publicados recientemente</h5>
+        </div>
+
+        <div class="card-body">
+
+            {% if recent_products %}
+
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Vendedor</th>
+                                <th>Precio</th>
+                                <th>Existencias</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for product in recent_products %}
+                                <tr>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ product.owner.username }}</td>
+                                    <td>${{ product.price }}</td>
+                                    <td>{{ product.stock }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+            {% else %}
+
+                <p class="text-secondary mb-0">
+                    Todavía no hay productos publicados.
+                </p>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- CATEGORÍAS -->
+
+    <div class="card text-white mb-4"
+         style="background:#202034; border:1px solid #40345f;">
+
+        <div class="card-header"
+             style="background:#29293c;">
+            <h5 class="mb-0">Categorías disponibles</h5>
+        </div>
+
+        <div class="card-body">
+
+            {% if categories %}
+
+                <div class="row g-3">
+
+                    {% for category in categories %}
+                        <div class="col-md-4 col-lg-3">
+
+                            <div class="p-3 rounded h-100"
+                                 style="background:#29293c;">
+
+                                <h6 class="text-warning">
+                                    {{ category.name }}
+                                </h6>
+
+                                {% if category.description %}
+                                    <p class="text-secondary small mb-0">
+                                        {{ category.description }}
+                                    </p>
+                                {% else %}
+                                    <p class="text-secondary small mb-0">
+                                        Sin descripción.
+                                    </p>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p class="text-secondary mb-0">
+                    Todavía no hay categorías registradas.
+                </p>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'home' %}" class="btn btn-outline-light">
+            Volver al inicio
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}
